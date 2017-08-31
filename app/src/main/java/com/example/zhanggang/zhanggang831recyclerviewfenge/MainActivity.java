@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -22,8 +23,10 @@ import butterknife.ButterKnife;
 public class MainActivity extends AppCompatActivity {
 
     @BindView(R.id.recyclerview) RecyclerView recyclerView;
-    private List<String> list;
     private MyAdapter adapter;
+
+    @BindView(R.id.quanxuan)TextView quanxuan;
+    @BindView(R.id.fanxuan)TextView fanxuan;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,15 +34,13 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
 
-        init(); //添加数据
-
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(linearLayoutManager);
         //添加分割线
         MyDecoration decoration = new MyDecoration(this,LinearLayoutManager.VERTICAL);
         recyclerView.addItemDecoration(decoration);
         //设置适配器
-        adapter = new MyAdapter(list,this);
+        adapter = new MyAdapter();
         recyclerView.setAdapter(adapter);
 
         //点击事件
@@ -62,12 +63,21 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
-    }
-    //添加模拟数据
-    private void init() {
-        list=new ArrayList<>();
-        for (int i = 0; i < 100; i++) {
-            list.add("第 "+i+" 条");
-        }
+        //全选
+        quanxuan.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                adapter.selectedAll();
+            }
+        });
+        //反选
+        fanxuan.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                adapter.selectedRevert();
+            }
+        });
+
+
     }
 }
